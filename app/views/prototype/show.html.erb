@@ -2,11 +2,11 @@
   <div class="inner">
     <div class="prototype__wrapper">
       <p class="prototype__hedding">
-        <%= @prototype.title%>
+        <%= @prototype.title %>
       </p>
-      <%= link_to "by プロトタイプの投稿者", root_path, class: :prototype__user %>
+      <%= link_to "by #{@prototype.user.name}", root_path, class: :prototype__user %>
       <%# プロトタイプの投稿者とログインしているユーザーが同じであれば以下を表示する %>
-      <% if @prototype.user_id == current_user.id %>
+      <% if user_signed_in? && @prototype.user_id == current_user.id %>
         <div class="prototype__manage">
           <%= link_to "編集する", edit_prototype_path(@prototype.id), class: :prototype__btn %>
           <%= link_to "削除する", prototype_path(@prototype.id), method: :delete, class: :prototype__btn %>
@@ -47,11 +47,13 @@
         <ul class="comments_lists">
         <% @comments.each do |comment| %>
           <%# 投稿に紐づくコメントを一覧する処理を記述する %>
+        　<% if @prototype.id == comment.prototype_id %>
             <li class="comments_list">
               <%# <%= " コメントのテキスト "%>
               <%= comment.text %>
               <%= link_to comment.user.name, user_path(@prototype), class: :comment_user %>
             </li>
+          <% end %>
           <%# // 投稿に紐づくコメントを一覧する処理を記述する %>
         <% end %>
         </ul>
